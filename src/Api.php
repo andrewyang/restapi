@@ -268,8 +268,7 @@ class Api {
    * @param array $args
    *   An array of arguments derived from the URL.
    *
-   * @throws RestApiException
-   * @throws UnauthorizedException
+   * @return ResponseInterface|null
    *
    */
   protected function handleAccess(ResourceInterface $resource, ResourceConfigurationInterface $resource_config, $method, JsonRequest $request, array $args = []) {
