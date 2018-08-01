@@ -162,7 +162,10 @@ class Api {
 
       $this->handleRequiredParameters($obj, $request);
 
-      $this->handleAccess($obj, $resource, $method, $request, $args);
+      if ($response = $this->handleAccess($obj, $resource, $method, $request, $args)) {
+        return restapi_invoke_hook_response($path, $resource, $request, $response);
+      }
+
       $response = call_user_func_array([$obj, $versioned_method], $args);
 
       if (!$response instanceof ResponseInterface) {
@@ -272,22 +275,14 @@ class Api {
   protected function handleAccess(ResourceInterface $resource, ResourceConfigurationInterface $resource_config, $method, JsonRequest $request, array $args = []) {
 
     if (method_exists($resource, 'access')) {
-      $result = call_user_func_array([$resource, 'access'], $args);
-
-      if ($result !== NULL) {
-          $this->returnAccessErrorResponse($result);
-      }
+      return call_user_func_array([$resource, 'access'], $args);
     }
 
     $method_name = 'access' . ucfirst($method);
     $access = _restapi_get_versioned_method($resource_config, $request, $method_name);
 
     if ($access) {
-      $result = call_user_func_array([$resource, $access], $args);
-
-      if ($result !== NULL) {
-          $this->returnAccessErrorResponse($result);
-      }
+      return call_user_func_array([$resource, $access], $args);
     }
   }
 
@@ -317,33 +312,5 @@ class Api {
     }
 
     return $request;
-  }
-
-  /**
-   * A helper method that throws appropriate exceptions based on the result of access check.
-   *
-   * @param mixed $result
-   *   The result received from the access check(s).
-   *
-   * @throws RestApiException
-   *   Thrown when an error response was returned.
-   * @throws UnauthorizedException
-   *   Thrown when the access check resulted in an explicit false being returned.
-   *
-   */
-  protected function returnAccessErrorResponse($result) {
-
-    if ($result === FALSE) {
-      throw new UnauthorizedException('You do not have permission to access this resource.');
-    }
-
-    if ($result instanceof JsonResponse) {
-      $body = json_decode((string) $result->getBody(), TRUE);
-      $error = isset($body['error']) ? $body['error'] : 'system';
-      throw new RestApiException($body['message'], $result->getStatusCode(), NULL, $error);
-    }
-    elseif ($result instanceof ResponseInterface) {
-      throw new RestApiException((string) $result->getBody(), $result->getStatusCode());
-    }
   }
 }
