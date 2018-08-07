@@ -4,6 +4,7 @@ namespace Drupal\restapi;
 
 use Drupal\restapi\Exception\InvalidParametersException;
 use Drupal\restapi\Exception\MissingParametersException;
+use Drupal\restapi\Exception\RestApiException;
 use Drupal\restapi\Exception\UnauthorizedException;
 use Drupal\restapi\JsonResponse as RestapiJsonResponse;
 use Exception;
@@ -268,6 +269,9 @@ class Api {
    *   (Optional) An array of arguments derived from the URL.
    *
    * @return ResponseInterface|null
+   *
+   * @throws RestApiException
+   * @throws UnauthorizedException
    *
    */
   protected function handleAccess(ResourceInterface $resource, ResourceConfigurationInterface $resource_config, $method, JsonRequest $request, array $args = []) {
