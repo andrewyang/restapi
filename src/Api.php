@@ -266,23 +266,32 @@ class Api {
    * @param JsonRequest $request
    *   The request.
    * @param array $args
-   *   An array of arguments derived from the URL.
+   *   (Optional) An array of arguments derived from the URL.
    *
    * @return ResponseInterface|null
    *
+   * @throws RestApiException
+   * @throws UnauthorizedException
    */
   protected function handleAccess(ResourceInterface $resource, ResourceConfigurationInterface $resource_config, $method, JsonRequest $request, array $args = []) {
 
+    $result = FALSE;
+
+    // Default to the base access method on the resource if available.
     if (method_exists($resource, 'access')) {
-      return call_user_func_array([$resource, 'access'], $args);
+      $result = call_user_func_array([$resource, 'access'], $args);
+    }
+    // Otherwise, determine if there is a versioned method to utilize based on
+    // the resource configuration.
+    elseif ($access_method = _restapi_get_versioned_method($resource_config, $request, 'access' . ucfirst($method))) {
+      $result = call_user_func_array([$resource, $access_method], $args);
     }
 
-    $method_name = 'access' . ucfirst($method);
-    $access = _restapi_get_versioned_method($resource_config, $request, $method_name);
-
-    if ($access) {
-      return call_user_func_array([$resource, $access], $args);
+    if ($result === FALSE) {
+      throw new UnauthorizedException('You do not have permission to access this resource.');
     }
+
+    return $result;
   }
 
 
