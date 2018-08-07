@@ -278,15 +278,15 @@ class Api {
 
     $result = FALSE;
 
+    // Run the base access method on the resource if it's available.
+    if (method_exists($resource, 'access')) {
+      $result = call_user_func_array([$resource, 'access'], $args);
+    }
+
     // Determine if there is a versioned method to utilize based on the resource
     // configuration.
     if ($access_method = _restapi_get_versioned_method($resource_config, $request, 'access' . ucfirst($method))) {
       $result = call_user_func_array([$resource, $access_method], $args);
-    }
-    
-    // Also run the base access method on the resource if it's available.
-    if (method_exists($resource, 'access')) {
-      $result = call_user_func_array([$resource, 'access'], $args);
     }
 
     if ($result === FALSE) {
