@@ -276,24 +276,34 @@ class Api {
    */
   protected function handleAccess(ResourceInterface $resource, ResourceConfigurationInterface $resource_config, $method, JsonRequest $request, array $args = []) {
 
-    $result = FALSE;
+    $access_methods = [];
 
     // Run the base access method on the resource if it's available.
     if (method_exists($resource, 'access')) {
-      $result = call_user_func_array([$resource, 'access'], $args);
+      $access_methods[] = 'access';
     }
 
     // Determine if there is a versioned method to utilize based on the resource
     // configuration.
-    if ($access_method = _restapi_get_versioned_method($resource_config, $request, 'access' . ucfirst($method))) {
+    if ($versioned_method = _restapi_get_versioned_method($resource_config, $request, 'access' . ucfirst($method))) {
+      $access_methods[] = $versioned_method;
+    }
+
+    // Iterate through the available access methods. If the result is ever FALSE
+    // or a ResponseInterface object, return it immediately.
+    foreach ($access_methods as $access_method) {
       $result = call_user_func_array([$resource, $access_method], $args);
+
+      if ($result === FALSE) {
+        throw new UnauthorizedException('You do not have permission to access this resource.');
+      }
+
+      if ($result instanceof ResponseInterface) {
+        return $result;
+      }
     }
 
-    if ($result === FALSE) {
-      throw new UnauthorizedException('You do not have permission to access this resource.');
-    }
-
-    return $result;
+    return NULL;
   }
 
 
