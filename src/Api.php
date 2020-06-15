@@ -20,7 +20,7 @@ class Api {
   /**
    * The Drupal user to call this resource as.
    *
-   * @var \StdClass
+   * @var \stdClass
    *
    */
   protected $user = NULL;
@@ -37,14 +37,14 @@ class Api {
   /**
    * Constructor
    *
-   * @param \StdClass $user
+   * @param \stdClass $user
    *   The Drupal user to call this resource as. Defaults to the current user.
    * @param JsonRequest $request
    *   The request to use to set the context for the resource. Defaults to the
    *   current page request.
    *
    */
-  public function __construct(\StdClass $user = NULL, JsonRequest $request = NULL) {
+  public function __construct(\stdClass $user = NULL, JsonRequest $request = NULL) {
 
     if (!$request) {
       $request = ServerRequestFactory::fromGlobals();
@@ -58,11 +58,11 @@ class Api {
   /**
    * Overrides the current set user.
    *
-   * @param \StdClass $user
+   * @param \stdClass $user
    *   The Drupal user to set for the API.
    *
    */
-  public function setUser(\StdClass $user) {
+  public function setUser(\stdClass $user) {
     $this->user = $user;
   }
 
@@ -82,7 +82,7 @@ class Api {
   /**
    * Returns the current user this API call is acting as.
    *
-   * @return \StdClass
+   * @return \stdClass
    *
    */
   public function getUser() {

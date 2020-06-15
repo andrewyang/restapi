@@ -14,19 +14,19 @@ interface AuthenticationServiceInterface {
   /**
    * Constructor
    *
-   * @param \StdClass $user
+   * @param \stdClass $user
    *   A Drupal user object.
    * @param RequestInterface $request
    *   A HTTP Request object.
    *
    */
-  public function __construct(\StdClass $user, RequestInterface $request);
+  public function __construct(\stdClass $user, RequestInterface $request);
 
 
   /**
    * Authenticates the request.
    *
-   * @return \StdClass|FALSE
+   * @return \stdClass|FALSE
    *   If successful, the user the request authenticated for; FALSE otherwise.
    *
    */

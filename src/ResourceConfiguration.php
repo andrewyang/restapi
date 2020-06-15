@@ -118,7 +118,7 @@ class ResourceConfiguration implements ResourceConfigurationInterface {
    * {@inheritdoc}
    *
    */
-  public function invokeResource(\StdClass $user, RequestInterface $request) {
+  public function invokeResource(\stdClass $user, RequestInterface $request) {
     $class = $this->getClass();
     return new $class($user, $request);
   }
@@ -128,7 +128,7 @@ class ResourceConfiguration implements ResourceConfigurationInterface {
    * {@inheritdoc}
    *
    */
-  public function invokeAuthenticationService(\StdClass $user, RequestInterface $request) {
+  public function invokeAuthenticationService(\stdClass $user, RequestInterface $request) {
     $class = $this->getAuthenticationClass();
     return new $class($user, $request);
   }

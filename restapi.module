@@ -591,7 +591,7 @@ function restapi_get_resources($refresh = FALSE) {
  * @param array $headers
  *   An array of headers to provide the resource. This overrides any headers set
  *   in the optional request object.
- * @param \StdClass $user
+ * @param \stdClass $user
  *   (Optional) The Drupal user to call this resource as. Defaults to the
  *   current user.
  * @param JsonRequest $request
@@ -601,7 +601,7 @@ function restapi_get_resources($refresh = FALSE) {
  * @return JsonResponse
  *
  */
-function restapi_execute_resource($method, $path, array $data = [], array $headers = [], \StdClass $user = NULL, JsonRequest $request = NULL) {
+function restapi_execute_resource($method, $path, array $data = [], array $headers = [], \stdClass $user = NULL, JsonRequest $request = NULL) {
 
   $path  = ltrim(trim($path), '/');
   $prefix = restapi_get_url_prefix();

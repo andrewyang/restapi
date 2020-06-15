@@ -22,7 +22,7 @@ abstract class AbstractAuthenticationService implements AuthenticationServiceInt
   /**
    * A Drupal user object.
    *
-   * @var \StdClass
+   * @var \stdClass
    *
    */
   protected $user = NULL;
@@ -32,7 +32,7 @@ abstract class AbstractAuthenticationService implements AuthenticationServiceInt
    * {@inheritdoc}
    *
    */
-  public function __construct(\StdClass $user, RequestInterface $request) {
+  public function __construct(\stdClass $user, RequestInterface $request) {
     $this->user = $user;
     $this->request = $request;
   }
@@ -48,7 +48,7 @@ abstract class AbstractAuthenticationService implements AuthenticationServiceInt
   /**
    * Retrieves the Drupal user.
    *
-   * @return \StdClass
+   * @return \stdClass
    *
    */
   protected function getUser() {

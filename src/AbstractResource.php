@@ -32,7 +32,7 @@ abstract class AbstractResource implements ResourceInterface {
   /**
    * A Drupal user object.
    *
-   * @var \StdClass
+   * @var \stdClass
    */
   protected $user = NULL;
 
@@ -50,7 +50,7 @@ abstract class AbstractResource implements ResourceInterface {
    * {@inheritdoc}
    *
    */
-  public function __construct(\StdClass $user, ServerRequestInterface $request, HttpResponseFactory $http = NULL) {
+  public function __construct(\stdClass $user, ServerRequestInterface $request, HttpResponseFactory $http = NULL) {
     $this->user    = $user;
     $this->request = $request;
     $this->http    = $http ?: new HttpResponseFactory();
@@ -112,7 +112,7 @@ abstract class AbstractResource implements ResourceInterface {
   /**
    * Returns the current user.
    *
-   * @return \StdClass
+   * @return \stdClass
    *
    */
   public function getUser() {
